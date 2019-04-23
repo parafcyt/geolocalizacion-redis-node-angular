@@ -28,6 +28,23 @@ exports.radios =(req,res)=>{
     res.send(resultados);
 }
 
+exports.distancia=(req,res)=>{
+
+    conexion.geoadd('distancia',req.body.lat,req.body.lon,'usuario');
+
+    conexion.geopos(req.body.rubro, req.body.nombre, (err,value)=>{
+        console.log(value);
+        
+        //conexion.geoadd('distancia',value[0],value[1], req.body.nombre);
+    });
+
+    conexion.geodist('distancia','usuario',req.body.nombre, (err,value)=>{
+        console.log(value);
+        res.send(value);
+        
+    });
+
+}
 
     //inicializacion de bbdd
 exports.iniciarListas =(req,res)=>{
