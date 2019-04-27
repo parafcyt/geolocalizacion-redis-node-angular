@@ -5,7 +5,10 @@ const controladores=require('../controladores/geo.controladores');
 
 
 //creo rutas
-rutas.get('/distancia/5km',controladores.radioPara1);
+rutas.get('/radio5km',controladores.radios);
+rutas.get('/iniciarbbdd',controladores.iniciarListas);
+rutas.get('/distancia',controladores.distancia);
+rutas.get('/radio',controladores.radioPara1);
 
 //exporto
 module.exports=rutas;

@@ -4,27 +4,46 @@
 const redisCliente=require('../conexion/conexion');
 const conexion= redisCliente();
 const lista=['cervecerias', 'farmacias', 'universidades','centroEmergencias','supermercados'];
+//var resultados=[];
 
 //funciones
 
 exports.radioPara1 =(req,res)=>{
-    conexion.georadius('cervecerias',req.body.lat,req.body.lon,'5','km',(err,value)=>{
+    conexion.georadius(req.body.rubro,req.body.lat,req.body.lon,'5','km',(err,value)=>{
         console.log(value);
         res.send(value);
     });
 }
 
 exports.radios =(req,res)=>{
-    const resultados=[];
+    var resultados= new Array();
+    //console.log('resultados1 nuevo: '+resultados1);
     for (let i = 0; i < lista.length; i++) {
+
         conexion.georadius(lista[i],req.body.lat,req.body.lon,'5','km',(err,value)=>{
-            console.log(value);
-            resultados.push(value[0]);
+            //console.log('muestro value'+i+value);
+            // for (let j = 0; j < value.length; j++) {
+            //     resultados.push(value[j]);
+            //     console.log('value'+j+': '+value[j]);
+
+            // }
+            //resultados.push.apply(value, resultados1)
+            //resultados=resultados1.concat(value);
+            //console.log('resultados: '+resultados);
+            //Array.prototype.push.apply(resultados, value);
+            //resultados.push(resultados);
             
-        });
+            
+            //resultados[i]=value;
+            console.log(resultados);
+
+        }); 
+
+        //console.log('RESULTADOS:'+resultados[i]);
         
     }
-
+    console.log('muestro resultados:'+resultados);
+    
     res.send(resultados);
 }
 
@@ -35,10 +54,10 @@ exports.distancia=(req,res)=>{
     conexion.geopos(req.body.rubro, req.body.nombre, (err,value)=>{
         console.log(value);
         
-        //conexion.geoadd('distancia',value[0],value[1], req.body.nombre);
+        conexion.geoadd('distancia',value[0][0],value[0][1], req.body.nombre);
     });
 
-    conexion.geodist('distancia','usuario',req.body.nombre, (err,value)=>{
+    conexion.geodist('distancia','usuario',req.body.nombre, 'km',(err,value)=>{
         console.log(value);
         res.send(value);
         
@@ -76,6 +95,8 @@ exports.iniciarListas =(req,res)=>{
     conexion.geoadd(lista[4],'-32.486262','-58.232637','Supermercado Dar El Supremo');
     conexion.geoadd(lista[4],'-32.488479','-58.241781','Supermercado DIA');
     conexion.geoadd(lista[4],'-32.485651','-58.239735','Supermercado Yong Qiang');
+
+    
 
     res.send({msj:'BASE DE DATOS INICIADA'});
 }
