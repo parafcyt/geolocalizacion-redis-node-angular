@@ -3,13 +3,13 @@
     //conexion a redis
 const redisCliente=require('../conexion/conexion');
 const conexion= redisCliente();
-const lista=['cervecerias', 'farmacias', 'universidades','centroEmergencias','supermercados'];
+const lista=['cervecerias', 'farmacias', 'universidades','centro de emergencias','supermercados'];
 //var resultados=[];
 
 //funciones
 
 exports.radioPara1 =(req,res)=>{
-    conexion.georadius(req.body.rubro,req.body.lat,req.body.lon,'5','km',(err,value)=>{
+    conexion.georadius(req.body.rubro,req.body.lat,req.body.lon,'1','km',(err,value)=>{
         console.log(value);
         res.send(value);
     });
@@ -20,7 +20,7 @@ exports.radios =(req,res)=>{
     //console.log('resultados1 nuevo: '+resultados1);
     for (let i = 0; i < lista.length; i++) {
 
-        conexion.georadius(lista[i],req.body.lat,req.body.lon,'5','km',(err,value)=>{
+        conexion.georadius(lista[i],req.body.lat,req.body.lon,'1','km',(err,value)=>{
             //console.log('muestro value'+i+value);
             // for (let j = 0; j < value.length; j++) {
             //     resultados.push(value[j]);
@@ -51,15 +51,24 @@ exports.distancia=(req,res)=>{
 
     conexion.geoadd('distancia',req.body.lat,req.body.lon,'usuario');
 
-    conexion.geopos(req.body.rubro, req.body.nombre, (err,value)=>{
+    conexion.geopos(req.body.rubro, req.body.lugar, (err,value)=>{
         console.log(value);
         
-        conexion.geoadd('distancia',value[0][0],value[0][1], req.body.nombre);
+        conexion.geoadd('distancia',value[0][0],value[0][1], req.body.lugar);
+     
     });
 
-    conexion.geodist('distancia','usuario',req.body.nombre, 'km',(err,value)=>{
+    conexion.geodist('distancia','usuario',req.body.lugar, 'km',(err,value)=>{
         console.log(value);
-        res.send(value);
+        
+
+        if (value==null) {
+            this.distancia(req,res);
+        }
+        else {
+            res.send(value);
+        }
+        
         
     });
 
