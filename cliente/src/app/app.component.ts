@@ -14,11 +14,11 @@ import { log } from 'util';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  uader:any ={lat: -32.479240,lon: -58.233421}; //any para poder agregarle un campo
+  //uader:any ={lat: -32.479240,lon: -58.233421}; //any para poder agregarle un campo
 
   ubicacionPersonalizada: any={};
 
-  elegioPersonalizada=true;
+  noElegioPersonalizada=true;
 
   listaRubros=['cervecerias', 'farmacias', 'universidades','centro de emergencias','supermercados'];
 
@@ -34,9 +34,15 @@ export class AppComponent implements OnInit{
 
   ngOnInit() {
     
-    //this.ubicacionPersonalizada = this.uader;
-    this.getRadios(this.uader);
+    this.ubicacionPersonalizada = {lat: -32.479240,lon: -58.233421};
+    this.getRadios(this.ubicacionPersonalizada);
      //console.log(this.radiosPorRubro);
+  }
+
+  uaderUbicacion(){
+    this.noElegioPersonalizada=true;
+    this.ubicacionPersonalizada = {lat: -32.479240,lon: -58.233421};
+    this.getRadios(this.ubicacionPersonalizada);
   }
 
   getPersonalizada(){
